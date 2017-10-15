@@ -1,0 +1,7 @@
+{
+  "name": "Polymer PWA Boilerplate by Max Tsai",
+  "short_name": "Polymer PWA Boilerplate",
+  "description": "Max&#39;s Polymer PWA Boilerplate by Max Tsai",
+  "start_url": "/",
+  "display": "standalone"
+}
