@@ -23,14 +23,3 @@
  * Copyright 2007- by Max Tsai (mt8168@gmail.com)
  *
  */
-"use strict";
-
-var client;
-
-function initDialogflow(token) {
-  client = new ApiAi.ApiAiClient({accessToken: token});
-};
-
-function sendText(text) {
-  return client.textRequest(text);
-}
