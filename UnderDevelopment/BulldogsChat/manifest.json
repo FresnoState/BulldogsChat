@@ -1,0 +1,24 @@
+{
+  "name": "BulldogsChat - An A.I. Chatbot",
+  "short_name": "BulldogsChat",
+  "description": "BulldogsChat - An A.I. Chatbot by Max Tsai",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "images/bulldogs48.png",
+      "type": "image/png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "images/bulldogs96.png",
+      "type": "image/png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "images/bulldogs192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": "index.html?launcher=true"
+}
