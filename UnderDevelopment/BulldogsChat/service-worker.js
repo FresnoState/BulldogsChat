@@ -1,59 +1,92 @@
-const PRECACHE = 'precache-v1';
-const RUNTIME = 'runtime';
+var cacheName = 'bulldogs-chatbot-v0';
 
-// A list of local resources we always want to be cached.
-const PRECACHE_URLS = [
-  '/',
-  '/index.html',
-  '/js/**/*',
-  '/cs/**/*',
-  '/images/**/*'
+var filesToCache = [
+    './',
+    './css/**/*',
+    './images/**/*',
+    './js/**/*',
+    './fonts/**/*'
 ];
 
-// The install handler takes care of precaching the resources we always need.
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(PRECACHE)
-      .then(cache => cache.addAll(PRECACHE_URLS))
-      .then(self.skipWaiting())
-  );
-});
+// Install Service Worker
+self.addEventListener('install', function(event) {
 
-// The activate handler takes care of cleaning up old caches.
-self.addEventListener('activate', event => {
-  const currentCaches = [PRECACHE, RUNTIME];
-  event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return cacheNames.filter(cacheName => !currentCaches.includes(cacheName));
-    }).then(cachesToDelete => {
-      return Promise.all(cachesToDelete.map(cacheToDelete => {
-        return caches.delete(cacheToDelete);
-      }));
-    }).then(() => self.clients.claim())
-  );
-});
+    console.log('Service Worker: Installing....');
 
-// The fetch handler serves responses for same-origin resources from a cache.
-// If no response is found, it populates the runtime cache with the response
-// from the network before returning it to the page.
-self.addEventListener('fetch', event => {
-  // Skip cross-origin requests, like those for Google Analytics.
-  if (event.request.url.startsWith(self.location.origin)) {
-    event.respondWith(
-      caches.match(event.request).then(cachedResponse => {
-        if (cachedResponse) {
-          return cachedResponse;
-        }
+    event.waitUntil(
 
-        return caches.open(RUNTIME).then(cache => {
-          return fetch(event.request).then(response => {
-            // Put a copy of the response in the runtime cache.
-            return cache.put(event.request, response.clone()).then(() => {
-              return response;
-            });
-          });
-        });
-      })
+        // Open the Cache
+        caches.open(cacheName).then(function(cache) {
+            console.log('Service Worker: Caching App Shell at the moment......');
+
+            // Add Files to the Cache
+            return cache.addAll(filesToCache);
+        })
     );
-  }
+});
+
+
+// Fired when the Service Worker starts up
+self.addEventListener('activate', function(event) {
+
+    console.log('Service Worker: Activating....');
+
+    event.waitUntil(
+        caches.keys().then(function(cacheNames) {
+            return Promise.all(cacheNames.map(function(key) {
+                if( key !== cacheName) {
+                    console.log('Service Worker: Removing Old Cache', key);
+                    return caches.delete(key);
+                }
+            }));
+        })
+    );
+    return self.clients.claim();
+});
+
+
+self.addEventListener('fetch', function(event) {
+
+    console.log('Service Worker: Fetch', event.request.url);
+
+    console.log("Url", event.request.url);
+
+    event.respondWith(
+        caches.match(event.request).then(function(response) {
+            return response || fetch(event.request);
+        })
+    );
+});
+
+
+// triggered everytime, when a push notification is received.
+self.addEventListener('push', function(event) {
+
+  console.info('Event: Push');
+
+  var title = 'New commit on Github Repo: RIL';
+
+  var body = {
+    'body': 'Click to see the latest commit',
+    'tag': 'pwa',
+    'icon': './images/bulldogs_48.png'
+  };
+
+  event.waitUntil(
+    self.registration.showNotification(title, body)
+  );
+});
+
+
+self.addEventListener('notificationclick', function(event) {
+
+  var url = './offlineTBD.html';
+
+  event.notification.close(); //Close the notification
+
+  // Open the app and navigate to latest.html after clicking the notification
+  event.waitUntil(
+    clients.openWindow(url)
+  );
+
 });
