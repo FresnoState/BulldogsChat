@@ -4,7 +4,7 @@ var client;
 
 function initDialogflow() {
   // client = new ApiAi.ApiAiClient({accessToken: token});
-  client = new ApiAi.ApiAiClient({accessToken: '32c96fe7d0d6475190debe4bd49979fe'});
+  client = new ApiAi.ApiAiClient({accessToken: '8d01be667dde4034a598076cc23d1cb7'});
 };
 
 function sendText(text) {

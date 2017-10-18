@@ -1,0 +1,11 @@
+"use strict";
+
+var client;
+
+function initDialogflow(token) {
+  client = new ApiAi.ApiAiClient({accessToken: token});
+};
+
+function sendText(text) {
+  return client.textRequest(text);
+}
