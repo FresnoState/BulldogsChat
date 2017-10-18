@@ -2,11 +2,8 @@ var cacheName = 'bulldogs-chatbot-v0';
 
 var filesToCache = [
     './',
-    './css/**/*',
-    './images/**/*',
-    './js/**/*',
-    './fonts/**/*'
-];
+    './images/fresno-state.png'
+  ];
 
 // Install Service Worker
 self.addEventListener('install', function(event) {

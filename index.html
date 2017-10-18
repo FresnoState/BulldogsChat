@@ -1,50 +1,155 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BulldogsChat - All about Fresno State</title>
+  <link rel="stylesheet" type="text/css" href="css/default.css">
 
-    <title>BulldogsChat</title>
-    <meta name="description" content="The Fresno State Bulldogs A.I. Chatbot.">
+  <!-- TODO add manifest here -->
+  <link rel="manifest" href="/manifest.json">
+  <!-- Add to home screen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Bulldogs Chatbot">
+  <link rel="apple-touch-icon" href="images/bulldogs96.png">
+  <meta name="msapplication-TileImage" content="images/bulldogs128.png">
+  <meta name="msapplication-TileColor" content="#002D72">
 
-    <link rel="manifest" href="/manifest.json">
+  <script src="/js/jquery-3.2.1.min.js"></script>
+  <script src="/js/ApiAi.js"></script>
+  <script src="/js/dialogflow.js"></script>
 
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
+  <script>
 
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/css/bootstrap-theme.min.css" rel="stylesheet">
+    $(document).ready(function() {
 
-    <script src="/js/jquery-3.2.1.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
+      $speechInput = $("#inputAsk");
+      $recBtn = $("#enableSpeech");
+      $aiBtn = $("#inputSend");
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+      $dialogBox = $("#dialog-container");
 
-    <script src="/js/ApiAi.js"></script>
+      // initial Connecion
+      initDialogflow();
 
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-          navigator.serviceWorker.register('/service-worker.js');
+      if ( typeof webkitSpeechRecognition !== "undefined" ) {
+        $recBtn.show();
+        var recognition = new webkitSpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+      } else {
+        $recBtn.hide();
+      }
+
+      $speechInput.keypress(function(event) {
+        if (event.which == 13) {
+          event.preventDefault();
+          $dialogBox.append('<div class="inText"><b> You: </b>' + $speechInput.val() + "</div>");
+          $dialogBox.scrollTop($dialogBox[0].scrollHeight);
+          getResponse($speechInput.val());
+          $speechInput.val('');
+          $speechInput.attr("placeholder", "Type your question ..");
+        }
+      });
+
+      $speechInput.on("click", function(event) {
+          $speechInput.val('');
+      });
+
+      $recBtn.on("click", function(event) {
+        $speechInput.val('Listening');
+        switchRecognition();
+        $recBtn.attr('src', '/images/redMic32.png');
+      });
+
+
+      $aiBtn.on("click", function(event) {
+        $dialogBox.append('<div class="inText"><b> You: </b>' + $speechInput.val() + "</div>");
+        getResponse($speechInput.val());
+        $speechInput.val('Type your question .. ');
+      });
+
+      function switchRecognition() {
+        recognition.onresult = function(event) {
+          var text = "";
+            for (var i = event.resultIndex; i < event.results.length; ++i) {
+              text += event.results[i][0].transcript;
+          }
+          console.log(text);
+          $speechInput.val(text);
+          $recBtn.attr('src', '/images/blueMic32.png');
+          $aiBtn.click();
+        }
+        recognition.start();
+      }
+
+      function getResponse(value) {
+
+        sendText(value)
+        .then(function(response) {
+          var result;
+          try {
+            result = response.result.fulfillment.speech;
+            $dialogBox.append('<div class="outText">' + '<b><img src="/images/VictorE64.png"></b> ' + result + "</div>");
+            $dialogBox.scrollTop($dialogBox[0].scrollHeight);
+          } catch(error) {
+            $dialogBox.append('<div class="outText">' + '<b><img src="/images/VictorE64.png"></b> ' + "Sorry. No Answer! Please try again!" + "</div>");
+          }
+
+        })
+        .catch(function(err) {
+          // setResponseJSON(err);
+          // setResponseOnNode("Something goes wrong", responseNode);
+          alert ("Something goes wrong");
         });
+
       }
-    </script>
+    });
+  </script>
 
-    <style>
-      body {
-        margin: 0;
-        background-color: black;
-        background-image: linear-gradient(to bottom, rgb(0, 0, 0) 0%, rgb(50, 50, 50) 50%, rgb(0, 0, 0) 100%);
-        background-attachment: fixed;
-        font-family: 'Roboto', 'Noto', sans-serif;
-      }
-    </style>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/service-worker.js');
+      });
+    }
+  </script>
 
-  </head>
+</head>
+<body>
 
-  <body>
+  <header class="header" style="text-align: left;">
+    <h1 class="header__title"><div class="rightHeader">BulldogsChat</div><div class="leftHeader"><img src="images/bulldogs64.png" class="imageMiddle"/></div></h1>
+  </header>
 
-    ** Max at Work **
+  <main class="main">
+    <div id="conversation-container">
 
-  </body>
+      <div id="dialog-container">
+        Weclome to BulldogsChat - the Frresno State Virtual Assistant!<br/><br/>
+      </div>
+
+      <div id="input-container">
+        <div id="input-box">
+            <div class="inputForm">
+              <div class="rightInput">
+                <button id="inputSend" type="button">Send!</button>
+              </div>
+              <div class="leftInput">
+                <input type="text" id="inputAsk" class="textInput" value="" placeholder="Type your question .. " />
+              </div>
+            </div>
+            <br/>
+            <img id="enableSpeech" class="imageMiddle" src="images/blueMic32.png" />
+        </div>
+      </div>
+
+
+    </div>
+  </main>
+
+
+</body>
 </html>

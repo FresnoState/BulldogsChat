@@ -5,17 +5,17 @@
   "display": "standalone",
   "icons": [
     {
-      "src": "bulldogs_48.png",
+      "src": "images/bulldogs48.png",
       "type": "image/png",
       "sizes": "48x48"
     },
     {
-      "src": "bulldogs_96.png",
+      "src": "images/bulldogs96.png",
       "type": "image/png",
       "sizes": "96x96"
     },
     {
-      "src": "bulldogs_192.png",
+      "src": "images/bulldogs192.png",
       "type": "image/png",
       "sizes": "192x192"
     }
