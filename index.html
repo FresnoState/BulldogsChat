@@ -8,14 +8,14 @@
  *
  * -----------------------------------------------
  *
- * More Information: 
+ * More Information:
  *   https://www.facebook.com/BulldogsChat/
  * App Frontend:
  *   - node.js (https://nodejs.org)
  *   - Progressive Web App (https://en.wikipedia.org/wiki/Progressive_web_app)
  * A.I.
  *   Google - DialogFlow aka. API.ai (https://dialogflow.com)
- *   work in progress: 
+ *   work in progress:
  *     - RASA (https://rasa.ai/)
  *     - AWS Lex (https://aws.amazon.com/lex)
  * -----------------------------------------------
@@ -73,7 +73,7 @@
       $speechInput.keypress(function(event) {
         if (event.which == 13) {
           event.preventDefault();
-          $dialogBox.append('<div class="inText"><b> You: </b>' + $speechInput.val() + "</div>");
+          $dialogBox.append('<div class="inText"><div class="inTextLeft"><img src="images/guest.png" width="32px" /></div><div class="inTextRight">' + $speechInput.val() + "</div></div>");
           $dialogBox.scrollTop($dialogBox[0].scrollHeight);
           getResponse($speechInput.val());
           $speechInput.val('');
@@ -119,10 +119,10 @@
           var result;
           try {
             result = response.result.fulfillment.speech;
-            $dialogBox.append('<div class="outText">' + '<b><img src="/images/VictorE64.png"></b> ' + result + "</div>");
+            $dialogBox.append('<div class="outText"><div class="outTextLeft"><div class="outTextLeftInside">' + result + '</div></div><div class="outTextLRight"><img src="/images/VictorE64.png"> ' + "</div></div>");
             $dialogBox.scrollTop($dialogBox[0].scrollHeight);
           } catch(error) {
-            $dialogBox.append('<div class="outText">' + '<b><img src="/images/VictorE64.png"></b> ' + "Sorry. No Answer! Please try again!" + "</div>");
+            $dialogBox.append('<div class="outText">' + '<b><img src="/images/VictorE64.png" width="32px"></b> ' + "Sorry. No Answer! Please try again!" + "</div>");
           }
 
         })
@@ -155,7 +155,7 @@
     <div id="conversation-container">
 
       <div id="dialog-container">
-        Weclome to BulldogsChat - the Frresno State Virtual Assistant!<br/><br/>
+        Weclome to BulldogsChat - the Fresno State Virtual Assistant! (R&D)<br/><br/>
       </div>
 
       <div id="input-container">
