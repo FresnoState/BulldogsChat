@@ -55,6 +55,7 @@
       $speechInput = $("#inputAsk");
       $recBtn = $("#enableSpeech");
       $aiBtn = $("#inputSend");
+      $grayBtn = $("#disableSpeech");
 
       $dialogBox = $("#dialog-container");
 
@@ -62,19 +63,20 @@
       initDialogflow();
 
       if ( typeof webkitSpeechRecognition !== "undefined" ) {
+        $grayBtn.hide();
         $recBtn.show();
         var recognition = new webkitSpeechRecognition();
         recognition.continuous = false;
         recognition.interimResults = false;
       } else {
         $recBtn.hide();
+        $grayBtn.show();
       }
 
       $speechInput.keypress(function(event) {
         if (event.which == 13) {
           event.preventDefault();
-          $dialogBox.append('<div class="outText"><div class="outTextLeft"><div class="outTextLeftInside">' + $speechInput.val() + '</div></div><div class="outTextLRight"> <img src="images/guest.png" width="32px"> ' + "</div></div>");
-          // $dialogBox.append('<div class="inText"><div class="inTextLeft"><img src="images/guest.png" width="32px" /></div><div class="inTextRight">' + $speechInput.val() + "</div></div>");
+          $dialogBox.append('<div class="outText"><div class="outTextLeft"><div class="outTextLeftInside">' + $speechInput.val() + '</div></div><div class="outTextLRight"> <img class="img-circle" src="images/guest.png" width="32px"> ' + "</div></div>");
           $dialogBox.scrollTop($dialogBox[0].scrollHeight);
           getResponse($speechInput.val());
           $speechInput.val('');
@@ -95,7 +97,7 @@
 
       $aiBtn.on("click", function(event) {
         // $dialogBox.append('<div class="inText"><b> You: </b>' + $speechInput.val() + "</div>");
-        $dialogBox.append('<div class="outText"><div class="outTextLeft"><div class="outTextLeftInside">' + $speechInput.val() + '</div></div><div class="outTextLRight"> <img src="images/guest.png" width="32px"> ' + "</div></div>");
+        $dialogBox.append('<div class="outText"><div class="outTextLeft"><div class="outTextLeftInside">' + $speechInput.val() + '</div></div><div class="outTextLRight"> <img class="img-circle" src="images/guest.png" width="32px"> ' + "</div></div>");
         getResponse($speechInput.val());
         $speechInput.val('Type your question .. ');
       });
@@ -121,10 +123,10 @@
           var result;
           try {
             result = response.result.fulfillment.speech;
-            $dialogBox.append('<div class="inText"><div class="inTextLeft"><img src="images/VictorE64.png"> </div><div class="inTextRight">' + result + '</div></div>');
+            $dialogBox.append('<div class="inText"><div class="inTextLeft"><img class="img-circle" src="images/VictorE64.png"> </div><div class="inTextRight">' + result + '</div></div>');
             $dialogBox.scrollTop($dialogBox[0].scrollHeight);
           } catch(error) {
-            $dialogBox.append('<div class="inText"><div class="inTextLeft"><img src="images/VictorE64.png"> </div><div class="inTextRight">' + "Sorry. No Answer! Please try again!" + '</div></div>');
+            $dialogBox.append('<div class="inText"><div class="inTextLeft"><img class="img-circle" src="images/VictorE64.png"> </div><div class="inTextRight">' + "Sorry. No Answer! Please try again!" + '</div></div>');
           }
 
         })
@@ -156,7 +158,7 @@
 
       <div id="dialog-container">
 
-        <div class="inText"><div class="inTextLeft"><img src="/images/VictorE64.png"></div><div class="inTextRight">Weclome to BulldogsChat - the Fresno State Virtual Assistant! (R&D)</div></div>
+        <div class="inText"><div class="inTextLeft"><img class="img-circle" src="/images/VictorE64.png"></div><div class="inTextRight">Weclome to BulldogsChat - the Fresno State Virtual Assistant! (R&D)</div></div>
 
       </div>
 
@@ -170,9 +172,11 @@
                 <input type="text" id="inputAsk" class="textInput" value="" placeholder="Type your question .. " />
               </div>
             </div>
-            <br/>
-            <img id="enableSpeech" class="imageMiddle" src="images/blueMic32.png" />
-            <br/><small>BulldogsChat is <a href="#">an opensoure project</a> / Copyright (c) 2017 by <a href="mailto:mt8168@gmail.com">Max Tsai</a> </small>
+            <div class="voiceAction">
+              <img id="enableSpeech" class="imageMiddle" src="images/blueMic32.png" />
+              <img id="disableSpeech" class="imageMiddle" src="images/grayMic32.png" />
+            </div>
+            <small style="font-size: .75em;">BulldogsChat is <a href="#">an opensoure project</a> / Copyright (c) 2017 by <a href="mailto:mt8168@gmail.com">Max Tsai</a> </small>
         </div>
       </div>
 
