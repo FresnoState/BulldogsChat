@@ -248,11 +248,12 @@ body {
 
   .inTextLeft {
     float: left; /* <-- fixes the left panel to prevent from scrolling */
-    width:64px;
+    width:72px;
+    text-align: left;
   }
 
   .inTextRight {
-    margin-left:64px;
+    margin-left:72px;
     background:yellow;
     border: 1px solid #000;
     background: #f1f0ea;
@@ -274,7 +275,7 @@ body {
   }
 
   .outTextLeftInside {
-    margin-right: 64px;
+    margin-right: 72px;
     border: 1px solid #73AD21;
     background: #0084ff;
     border-radius: 10px;
@@ -284,8 +285,8 @@ body {
 
   .outTextLRight {
     float: right;
-    width: 64px;
-    margin-left: -64px;
+    width: 72px;
+    margin-left: -72px;
     border: solid;
   }
 

@@ -44,9 +44,9 @@
   <meta name="msapplication-TileImage" content="images/bulldogs128.png">
   <meta name="msapplication-TileColor" content="#002D72">
 
-  <script src="/js/jquery-3.2.1.min.js"></script>
-  <script src="/js/ApiAi.js"></script>
-  <script src="/js/dialogflow.js"></script>
+  <script src="js/jquery-3.2.1.min.js"></script>
+  <script src="js/ApiAi.js"></script>
+  <script src="js/dialogflow.js"></script>
 
   <script>
 
@@ -73,7 +73,8 @@
       $speechInput.keypress(function(event) {
         if (event.which == 13) {
           event.preventDefault();
-          $dialogBox.append('<div class="inText"><div class="inTextLeft"><img src="images/guest.png" width="32px" /></div><div class="inTextRight">' + $speechInput.val() + "</div></div>");
+          $dialogBox.append('<div class="outText"><div class="outTextLeft"><div class="outTextLeftInside">' + $speechInput.val() + '</div></div><div class="outTextLRight"> <img src="images/guest.png" width="32px"> ' + "</div></div>");
+          // $dialogBox.append('<div class="inText"><div class="inTextLeft"><img src="images/guest.png" width="32px" /></div><div class="inTextRight">' + $speechInput.val() + "</div></div>");
           $dialogBox.scrollTop($dialogBox[0].scrollHeight);
           getResponse($speechInput.val());
           $speechInput.val('');
@@ -88,12 +89,13 @@
       $recBtn.on("click", function(event) {
         $speechInput.val('Listening');
         switchRecognition();
-        $recBtn.attr('src', '/images/redMic32.png');
+        $recBtn.attr('src', 'images/redMic32.png');
       });
 
 
       $aiBtn.on("click", function(event) {
-        $dialogBox.append('<div class="inText"><b> You: </b>' + $speechInput.val() + "</div>");
+        // $dialogBox.append('<div class="inText"><b> You: </b>' + $speechInput.val() + "</div>");
+        $dialogBox.append('<div class="outText"><div class="outTextLeft"><div class="outTextLeftInside">' + $speechInput.val() + '</div></div><div class="outTextLRight"> <img src="images/guest.png" width="32px"> ' + "</div></div>");
         getResponse($speechInput.val());
         $speechInput.val('Type your question .. ');
       });
@@ -106,7 +108,7 @@
           }
           console.log(text);
           $speechInput.val(text);
-          $recBtn.attr('src', '/images/blueMic32.png');
+          $recBtn.attr('src', 'images/blueMic32.png');
           $aiBtn.click();
         }
         recognition.start();
@@ -119,16 +121,14 @@
           var result;
           try {
             result = response.result.fulfillment.speech;
-            $dialogBox.append('<div class="outText"><div class="outTextLeft"><div class="outTextLeftInside">' + result + '</div></div><div class="outTextLRight"><img src="/images/VictorE64.png"> ' + "</div></div>");
+            $dialogBox.append('<div class="inText"><div class="inTextLeft"><img src="images/VictorE64.png"> </div><div class="inTextRight">' + result + '</div></div>');
             $dialogBox.scrollTop($dialogBox[0].scrollHeight);
           } catch(error) {
-            $dialogBox.append('<div class="outText">' + '<b><img src="/images/VictorE64.png" width="32px"></b> ' + "Sorry. No Answer! Please try again!" + "</div>");
+            $dialogBox.append('<div class="inText"><div class="inTextLeft"><img src="images/VictorE64.png"> </div><div class="inTextRight">' + "Sorry. No Answer! Please try again!" + '</div></div>');
           }
 
         })
         .catch(function(err) {
-          // setResponseJSON(err);
-          // setResponseOnNode("Something goes wrong", responseNode);
           alert ("Something goes wrong");
         });
 
@@ -139,7 +139,7 @@
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('/service-worker.js');
+        navigator.serviceWorker.register('service-worker.js');
       });
     }
   </script>
@@ -155,7 +155,9 @@
     <div id="conversation-container">
 
       <div id="dialog-container">
-        Weclome to BulldogsChat - the Fresno State Virtual Assistant! (R&D)<br/><br/>
+
+        <div class="inText"><div class="inTextLeft"><img src="/images/VictorE64.png"></div><div class="inTextRight">Weclome to BulldogsChat - the Fresno State Virtual Assistant! (R&D)</div></div>
+
       </div>
 
       <div id="input-container">
